@@ -1,4 +1,4 @@
-import TOKEN from "../constants/finnHub";
+import TOKEN from "./finnHubAPI";
 
 import axios from "axios";
 export default axios.create({

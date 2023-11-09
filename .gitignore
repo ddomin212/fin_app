@@ -10,3 +10,4 @@ finnHubAPI.js
 **/env
 **/__pycache__
 /.firebase
+**/instance
