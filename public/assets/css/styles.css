@@ -1,0 +1,11 @@
+.site-section {
+  text-align: center;
+  padding: 40px;
+  max-width: 1000px;
+}
+
+#welcome {
+  /*max-width: 1000px;*/
+  margin: auto;
+}
+
