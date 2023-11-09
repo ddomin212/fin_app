@@ -6,18 +6,18 @@ import AuthComponent from "./AuthComponent";
 import { callAuth } from "../../services/backendService";
 
 function Register() {
-  const [regForm, setRegForm] = useState({
+  const [registerForm, setRegisterForm] = useState({
     email: "",
     password: "",
   });
 
   const navigate = useNavigate();
 
-  function RegisterUser(event) {
+  function registerUser(event) {
     callAuth({
       path: "register",
-      form: regForm,
-      setForm: setRegForm,
+      form: registerForm,
+      setForm: setRegisterForm,
     });
     navigate("/login");
     event.preventDefault();
@@ -25,7 +25,7 @@ function Register() {
 
   function handleChange(event) {
     const { value, name } = event.target;
-    setRegForm((prevNote) => ({
+    setRegisterForm((prevNote) => ({
       ...prevNote,
       [name]: value,
     }));
@@ -33,9 +33,9 @@ function Register() {
 
   return (
     <AuthComponent
-      form={regForm}
+      form={registerForm}
       handleChange={handleChange}
-      func={RegisterUser}
+      authFunc={registerUser}
       header={"Sign Up"}
       url={"/login"}
     />

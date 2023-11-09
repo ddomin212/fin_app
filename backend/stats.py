@@ -8,8 +8,11 @@ stats = Blueprint('stats', __name__)
 def watchList():
     from app import User
 
-    user_holding = User.query.filter_by(username=get_jwt_identity()).first()
-    return user_holding.watchlist, 200
+    current_user = User.query.filter_by(username=get_jwt_identity()).first()
+    if not current_user:
+        return {"msg": "User not found"}, 404
+    
+    return current_user.watchlist, 200
 
 
 @stats.route('/updateWatchList', methods=["POST"])
@@ -17,10 +20,13 @@ def watchList():
 def updateWatchList():
     from app import User, db
 
-    act_user = User.query.filter_by(username=get_jwt_identity()).first()
-    act_user.watchlist = request.json.get("update", None)
+    current_user = User.query.filter_by(username=get_jwt_identity()).first()
+    if not current_user:
+        return {"msg": "User not found"}, 404
+    
+    current_user.watchlist = request.json.get("update", None)
     db.session.commit()
-    return {"msg": "We happy Vincent."}, 200
+    return {"msg": "Item successfuly added to the watch list"}, 200
 
 
 @stats.route('/credit')
@@ -28,8 +34,11 @@ def updateWatchList():
 def credit():
     from app import User
 
-    user_holding = User.query.filter_by(username=get_jwt_identity()).first()
-    return str(user_holding.credit)
+    current_user = User.query.filter_by(username=get_jwt_identity()).first()
+    if not current_user:
+        return {"msg": "User not found"}, 404
+    
+    return str(current_user.credit)
 
 
 @stats.route('/updateCredit', methods=["POST"])
@@ -37,13 +46,16 @@ def credit():
 def updateCredit():
     from app import User, db
 
-    act_user = User.query.filter_by(username=get_jwt_identity()).first()
-    total = float(request.json.get("price", None)) * \
+    current_user = User.query.filter_by(username=get_jwt_identity()).first()
+    if not current_user:
+        return {"msg": "User not found"}, 404
+    
+    total_price = float(request.json.get("price", None)) * \
         int(request.json.get("amount", None))
-    if act_user.credit - total < 0:
+    if current_user.credit - total_price < 0:
         return {"msg": "Not enough funds"}, 400
     else:
-        act_user.credit -= total
+        current_user.credit -= total_price
     db.session.commit()
 
-    return {"msg": "We happy Vincent."}, 200
+    return {"msg": "Transaction successful"}, 200

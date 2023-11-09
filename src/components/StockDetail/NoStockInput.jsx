@@ -1,6 +1,6 @@
 import React from "react";
 
-function NoStockInput({ q, setQ }) {
+function NoStockInput({ quantity, setQuantity }) {
   return (
     <div
       class="container"
@@ -14,9 +14,9 @@ function NoStockInput({ q, setQ }) {
         type="number"
         style={{ marginRight: "12px", maxWidth: "200px", height: "48px" }}
         placeholder="No. of stocks"
-        value={q}
+        value={quantity}
         onChange={(e) => {
-          setQ(e.target.value);
+          setQuantity(e.target.value);
         }}
       />
     </div>

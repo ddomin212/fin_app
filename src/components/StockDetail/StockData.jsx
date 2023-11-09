@@ -7,12 +7,13 @@ import BuySellStock from "./BuySellStock";
 export const StockData = ({ symbol }) => {
   const [stockData, setStockData] = useState();
   const [stockPriceData, setStockPriceData] = useState();
-  const [q, setQ] = useState("");
+  const [quantity, setQuantity] = useState("");
 
   const navigator = useNavigate();
 
   useEffect(() => {
     let isMounted = true;
+
     const fetchPriceData = async () => {
       try {
         const response = await finnHub.get("/quote", {
@@ -24,7 +25,6 @@ export const StockData = ({ symbol }) => {
           data: response.data,
           symbol: response.config.params.symbol,
         };
-        console.log(data);
         if (isMounted) {
           setStockPriceData(data);
         }
@@ -32,6 +32,7 @@ export const StockData = ({ symbol }) => {
         console.log(err);
       }
     };
+
     const fetchData = async () => {
       try {
         const response = await finnHub.get("/stock/profile2", {
@@ -46,6 +47,7 @@ export const StockData = ({ symbol }) => {
         console.log(err);
       }
     };
+
     fetchData();
     fetchPriceData();
     return () => (isMounted = false);
@@ -56,8 +58,8 @@ export const StockData = ({ symbol }) => {
       {stockData && (
         <>
           <BuySellStock
-            q={q}
-            setQ={setQ}
+            quantity={quantity}
+            setQuantity={setQuantity}
             symbol={symbol}
             navigator={navigator}
             stockPriceData={stockPriceData}

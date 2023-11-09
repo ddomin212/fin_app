@@ -1,6 +1,6 @@
 import React from "react";
 
-function AuthForm({ form, handleChange, func, url, header }) {
+function AuthForm({ form, handleChange, authFunc, url, header }) {
   return (
     <form class="text-center">
       <div class="mb-3">
@@ -31,7 +31,7 @@ function AuthForm({ form, handleChange, func, url, header }) {
         <button
           class="btn btn-primary d-block w-100"
           type="submit"
-          onClick={func}
+          onClick={authFunc}
         >
           {header}
         </button>

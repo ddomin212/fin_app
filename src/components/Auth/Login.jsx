@@ -32,7 +32,7 @@ function Login(props) {
     <AuthComponent
       form={loginForm}
       handleChange={handleChange}
-      func={logMeIn}
+      authFunc={logMeIn}
       header={"Log in"}
       url={"/register"}
     />

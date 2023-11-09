@@ -10,34 +10,33 @@ export const StockList = () => {
   const { watchList } = useContext(WatchListContext);
 
   const navigate = useNavigate();
+
   useEffect(() => {
     let isMounted = true;
 
     const fetchData = async () => {
-      try {
-        const responses = await Promise.all(
-          watchList.map((stock) => {
-            return finnHub.get("/quote", {
-              params: {
-                symbol: stock,
-              },
-            });
-          })
-        );
+      const finnHubStockData = await Promise.all(
+        watchList.map((stock) => {
+          return finnHub.get("/quote", {
+            params: {
+              symbol: stock,
+            },
+          });
+        })
+      );
 
-        console.log(responses);
-        const data = responses.map((response) => {
-          return {
-            data: response.data,
-            symbol: response.config.params.symbol,
-          };
-        });
-        console.log(data);
-        if (isMounted) {
-          setStock(data);
-        }
-      } catch (err) {}
+      const data = finnHubStockData.map((response) => {
+        return {
+          data: response.data,
+          symbol: response.config.params.symbol,
+        };
+      });
+
+      if (isMounted) {
+        setStock(data);
+      }
     };
+
     fetchData();
     return () => (isMounted = false);
   }, [watchList]);
@@ -45,6 +44,7 @@ export const StockList = () => {
   const handleStockSelect = (symbol) => {
     navigate(`detail/${symbol}`);
   };
+
   return (
     <>
       <section>

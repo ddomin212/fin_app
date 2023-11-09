@@ -38,14 +38,14 @@ export const StocksContextProvider = (props) => {
     });
   };
 
-  const updateCredit = (price, q) => {
+  const updateCredit = (price, quantity) => {
     backendRequest({
       method: "POST",
       props,
       path: "updateCredit",
       data: {
         price: String(price),
-        amount: String(q),
+        amount: String(quantity),
       },
     });
   };
@@ -55,7 +55,7 @@ export const StocksContextProvider = (props) => {
     getStocks();
   }, []);
 
-  const updateDatabase = async (up, sym, key, q) => {
+  const updateDatabase = async (up, sym, key, quantity) => {
     const updates = JSON.stringify(up);
     backendRequest({
       method: "POST",
@@ -64,38 +64,38 @@ export const StocksContextProvider = (props) => {
       data: {
         update: updates,
         symbol: sym,
-        quant: q,
+        quant: quantity,
       },
     });
   };
 
-  const buyStock = (price, stock, q) => {
-    if (credit - price * q < 0) {
+  const buyStock = (price, stock, quantity) => {
+    if (credit - price * quantity < 0) {
       throw new Error("Not enough funds");
     }
-    updateCredit(price, q);
+    updateCredit(price, quantity);
     if (stocks.hasOwnProperty(stock) === false) {
       let copyOfStocks1 = { ...stocks };
       copyOfStocks1[stock] = 0;
-      copyOfStocks1[stock] += Number(q);
-      updateDatabase(copyOfStocks1, stock, "buyStock", q);
+      copyOfStocks1[stock] += Number(quantity);
+      updateDatabase(copyOfStocks1, stock, "buyStock", quantity);
       setStocks(copyOfStocks1);
     } else {
       let copyOfStocks2 = { ...stocks };
-      copyOfStocks2[stock] += Number(q);
-      updateDatabase(copyOfStocks2, stock, "buyStock", q);
+      copyOfStocks2[stock] += Number(quantity);
+      updateDatabase(copyOfStocks2, stock, "buyStock", quantity);
       setStocks(copyOfStocks2);
     }
     getCredit();
   };
 
-  const sellStock = (price, symbol, q) => {
-    if (q > findStock(symbol)) {
+  const sellStock = (price, symbol, quantity) => {
+    if (quantity > findStock(symbol)) {
       throw new Error("cannot sell stock you do not have");
     }
     let copyOfStocks = { ...stocks };
     if (stocks.hasOwnProperty(symbol) === true) {
-      copyOfStocks[symbol] -= Number(q);
+      copyOfStocks[symbol] -= Number(quantity);
       if (copyOfStocks[symbol] < 0) {
         delete copyOfStocks[symbol];
         deleteStock(symbol);
@@ -104,8 +104,8 @@ export const StocksContextProvider = (props) => {
     } else {
       throw new Error("FE -> cant sell stock you do not own");
     }
-    updateDatabase(copyOfStocks, symbol, "sellStock", q);
-    updateCredit("-" + price, q);
+    updateDatabase(copyOfStocks, symbol, "sellStock", quantity);
+    updateCredit("-" + price, quantity);
     getCredit();
   };
 

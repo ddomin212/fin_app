@@ -58,11 +58,11 @@ export const StockChart = ({ chartData, symbol }) => {
   console.log(series);
 
   const renderButtonSelect = (button) => {
-    const classes = "btn m-1 ";
+    const className = "btn m-1 ";
     if (button === dateFormat) {
-      return classes + "btn-primary";
+      return className + "btn-primary";
     } else {
-      return classes + "btn-outline-primary";
+      return className + "btn-outline-primary";
     }
   };
 

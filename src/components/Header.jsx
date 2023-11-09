@@ -1,26 +1,25 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/settings";
+import { backendRequest } from "../services/backendService";
 
 function Header(props) {
   const navigator = useNavigate();
+
   function logMeOut() {
-    axios({
-      method: "POST",
-      url: BASE_URL + "/logout",
-    })
-      .then((response) => {
-        props.token();
-        navigator("/");
-      })
-      .catch((error) => {
-        if (error.response) {
-          console.log(error.response);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        }
-      });
+    backendRequest({
+      method: "GET",
+      props,
+      path: "logout",
+      data: {},
+      responseFunc: (response) => {
+        localStorage.removeItem("token");
+        props.setToken(null);
+        navigator("/login");
+      },
+    });
   }
+
   return (
     <header className="text-end sticky-top">
       <nav class="navbar navbar-light navbar-expand-md py-3">
